@@ -116,6 +116,11 @@ class Tweet:
             )
 
     @property
+    def is_a_reply(self) -> bool:
+        """Is this Tweet a reply?"""
+        return self.in_reply_to is not None
+
+    @property
     def markdown_directory(self) -> Path:
         """The directory for the Markdown file associated with this tweet."""
         return Path(self.tweeted.strftime("%Y/%m/%d/"))
