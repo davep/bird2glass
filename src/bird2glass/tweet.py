@@ -81,6 +81,8 @@ class User:
 class Tweet:
     """Class that holds data for a Tweet."""
 
+    tweeter: User
+    """The `User` data of the tweeter of this tweet."""
     identity: str = ""
     """The ID of the Tweet."""
     full_text: str = ""
@@ -106,6 +108,7 @@ class Tweet:
             tweeter: The `User` details of the author of the tweets.
         """
         data = tweet["tweet"]
+        self.tweeter = tweeter
         self.identity = data["id_str"]
         self.full_text = data["full_text"]
         self.mentions = [User(user) for user in data["entities"]["user_mentions"]]
@@ -135,23 +138,31 @@ class Tweet:
         return self.markdown_directory / Path(self.identity).with_suffix(".md")
 
     @property
+    def url(self) -> str:
+        """The URL of this tweet."""
+        return f"{self.tweeter.url}/status/{self.identity}"
+
+    @property
     def _front_matter(self) -> str:
         return "\n".join(
-            (
+            matter
+            for matter in (
                 f"tweeted-at: {self.tweeted}",
                 f"favourite-count: {self.favourite_count}",
                 f"retweet-count: {self.retweet_count}",
                 f"is-reply: {'no' if self.in_reply_to_user is None else 'yes'}",
+                f"replying-to: {self.in_reply_to_tweet}"
+                if self.in_reply_to_tweet is not None
+                else "",
+                f"url: {self.url}",
             )
+            if matter
         )
 
     @property
     def markdown(self) -> str:
         """The Markdown representation of the Tweet."""
-        markdown = f"---\n{self._front_matter}\n---\n\n{self.full_text}\n"
-        if self.in_reply_to_tweet is not None:
-            markdown = f"{markdown}\n\nIs a reply to {self.in_reply_to_tweet}"
-        return markdown
+        return f"---\n{self._front_matter}\n---\n\n{self.full_text}\n"
 
 
 ### tweet.py ends here
