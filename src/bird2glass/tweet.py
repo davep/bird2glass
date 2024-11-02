@@ -87,8 +87,10 @@ class Tweet:
     """The full text of the Tweet."""
     mentions: list[User] = field(default_factory=list)
     """The users mentioned in the Tweet."""
-    in_reply_to: User | None = None
+    in_reply_to_user: User | None = None
     """The user the Tweet was in reply to, if any."""
+    in_reply_to_tweet: str | None = None
+    """The tweet this Tweet was in reply to, if it is a reply."""
     favourite_count: int = 0
     """The number of favourites for this Tweet."""
     retweet_count: int = 0
@@ -111,7 +113,7 @@ class Tweet:
         self.retweet_count = int(data["retweet_count"])
         self.tweeted = parse(data["created_at"])
         if "in_reply_to_user_id" in data:
-            self.in_reply_to = next(
+            self.in_reply_to_user = next(
                 (
                     user
                     for user in self.mentions
@@ -119,11 +121,8 @@ class Tweet:
                 ),
                 tweeter,
             )
-
-    @property
-    def is_a_reply(self) -> bool:
-        """Is this Tweet a reply?"""
-        return self.in_reply_to is not None
+            if "in_reply_to_status_id" in data:
+                self.in_reply_to_tweet = f"{self.in_reply_to_user.url}/status/{data['in_reply_to_status_id']}"
 
     @property
     def markdown_directory(self) -> Path:
