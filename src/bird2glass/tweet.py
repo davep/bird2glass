@@ -70,6 +70,11 @@ class User:
         """The name of the Markdown file for this user."""
         return Path(f"accounts/{self.handle}.md")
 
+    @property
+    def url(self) -> str:
+        """The URL for the user."""
+        return f"https://x.com/{self.handle}"
+
 
 ##############################################################################
 @dataclass
