@@ -65,6 +65,11 @@ class User:
             }
         )
 
+    @property
+    def markdown_file(self) -> Path:
+        """The name of the Markdown file for this user."""
+        return Path(f"accounts/{self.handle}.md")
+
 
 ##############################################################################
 @dataclass
