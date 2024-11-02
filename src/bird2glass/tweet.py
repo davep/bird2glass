@@ -84,6 +84,7 @@ class Tweet:
     retweet_count: int = 0
     """The number of retweets for this Tweet."""
     tweeted: datetime = field(default_factory=lambda: datetime(0, 0, 0))
+    """The time the Tweet was sent."""
 
     def __init__(self, tweet: dict[str, Any], tweeter: User) -> None:
         data = tweet["tweet"]
