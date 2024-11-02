@@ -92,6 +92,12 @@ class Tweet:
     """The time the Tweet was sent."""
 
     def __init__(self, tweet: dict[str, Any], tweeter: User) -> None:
+        """Initialise the Tweet object.
+
+        Args:
+            tweet: The Tweet data.
+            tweeter: The `User` details of the author of the tweets.
+        """
         data = tweet["tweet"]
         self.identity = data["id_str"]
         self.full_text = data["full_text"]
