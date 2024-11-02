@@ -38,16 +38,16 @@ def get_args() -> Namespace:
 
 
 ##############################################################################
-def load(tweets: Path) -> Iterable[Tweet]:
+def load(tweets: Path, tweeter: User) -> Iterable[Tweet]:
     """Load Tweets from the given file.
 
     Args:
         tweets: The JavaScript file that holds the main Tweet data.
+        tweeter: The author of the tweets.
 
     Yields:
         Tweet objects.
     """
-    tweeter = User.from_account(tweets)
     for tweet in load_javascript(tweets):
         yield Tweet(tweet, tweeter)
 
@@ -66,9 +66,19 @@ def main() -> None:
         print("The vault must be an existing directory.")
         exit(1)
 
-    for tweet in load(arguments.tweets):
+    tweeter = User.from_account(arguments.tweets)
+
+    # Ensure the directory that will hold account details is created and
+    # also create an entry for the author of the tweets.
+    (arguments.vault / tweeter.markdown_directory).mkdir(parents=True, exist_ok=True)
+    (arguments.vault / tweeter.markdown_file).write_text(tweeter.markdown)
+
+    for tweet in load(arguments.tweets, tweeter):
         (arguments.vault / tweet.markdown_directory).mkdir(parents=True, exist_ok=True)
         (arguments.vault / tweet.markdown_file).write_text(tweet.markdown)
+        for mention in tweet.mentions:
+            if not (arguments.vault / mention.markdown_file).exists():
+                (arguments.vault / mention.markdown_file).write_text(mention.markdown)
 
 
 ##############################################################################
