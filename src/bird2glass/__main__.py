@@ -58,7 +58,7 @@ def main() -> None:
     arguments = get_args()
 
     for tweet in load(arguments.tweets):
-        print(tweet.markdown_file)
+        print(tweet.markdown)
 
 
 ##############################################################################

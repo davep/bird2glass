@@ -134,5 +134,24 @@ class Tweet:
         """The name of the Markdown file for this Tweet."""
         return self.markdown_directory / Path(self.identity).with_suffix(".md")
 
+    @property
+    def _front_matter(self) -> str:
+        return "\n".join(
+            (
+                f"tweeted-at: {self.tweeted}",
+                f"favourite-count: {self.favourite_count}",
+                f"retweet-count: {self.retweet_count}",
+                f"is-reply: {'no' if self.in_reply_to_user is None else 'yes'}",
+            )
+        )
+
+    @property
+    def markdown(self) -> str:
+        """The Markdown representation of the Tweet."""
+        markdown = f"---\n{self._front_matter}\n---\n\n{self.full_text}\n"
+        if self.in_reply_to_tweet is not None:
+            markdown = f"{markdown}\n\nIs a reply to {self.in_reply_to_tweet}"
+        return markdown
+
 
 ### tweet.py ends here
