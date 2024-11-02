@@ -9,6 +9,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from json import loads
 from pathlib import Path
+from re import compile
 from typing import Any, cast
 
 ##############################################################################
@@ -169,10 +170,18 @@ class Tweet:
             if matter
         )
 
+    _HANDLE = compile(r"@([A-Za-z0-9_]{1,15})")
+    """Regular expression for finding a Twitter handle in some text."""
+
+    @property
+    def _markedup_full_text(self) -> str:
+        """The full text of the tweet, marked up for Markdown."""
+        return self._HANDLE.sub(r"[[\1|@\1]]", self.full_text)
+
     @property
     def markdown(self) -> str:
         """The Markdown representation of the Tweet."""
-        return f"---\n{self._front_matter}\n---\n\n{self.full_text}\n"
+        return f"---\n{self._front_matter}\n---\n\n{self._markedup_full_text}\n"
 
 
 ### tweet.py ends here
