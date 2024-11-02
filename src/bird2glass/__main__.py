@@ -30,6 +30,7 @@ def get_args() -> Namespace:
     )
     parser.add_argument(
         "vault",
+        type=Path,
         help="The directory where the vault files will be created",
     )
 
@@ -57,8 +58,17 @@ def main() -> None:
 
     arguments = get_args()
 
+    if not (arguments.tweets.exists() and arguments.tweets.is_file()):
+        print("Tweets must be a file and must exist.")
+        exit(1)
+
+    if not arguments.vault.is_dir():
+        print("The vault must be an existing directory.")
+        exit(1)
+
     for tweet in load(arguments.tweets):
-        print(tweet.markdown)
+        (arguments.vault / tweet.markdown_directory).mkdir(parents=True, exist_ok=True)
+        (arguments.vault / tweet.markdown_file).write_text(tweet.markdown)
 
 
 ##############################################################################
