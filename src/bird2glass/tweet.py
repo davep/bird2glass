@@ -110,6 +110,8 @@ class Tweet:
     """The number of retweets for this Tweet."""
     tweeted: datetime = field(default_factory=lambda: datetime(0, 0, 0))
     """The time the Tweet was sent."""
+    media: list[str] = field(default_factory=list)
+    """The list of media files associated with this Tweet."""
 
     def __init__(self, tweet: dict[str, Any], tweeter: User) -> None:
         """Initialise the Tweet object.
@@ -126,6 +128,15 @@ class Tweet:
         self.favourite_count = int(data["favorited"])
         self.retweet_count = int(data["retweet_count"])
         self.tweeted = parse(data["created_at"])
+        self.media = [
+            (
+                f"{self.identity}-{Path(media['media_url']).stem}.mp4"
+                if media["type"] in ("video", "animated_gif")
+                else f"{self.identity}-{Path(media['media_url']).name}"
+            )
+            for media in data.get("extended_entities", {}).get("media", [])
+            or data.get("entities", {}).get("media", [])
+        ]
         if "in_reply_to_user_id" in data:
             self.in_reply_to_user = next(
                 (
@@ -142,6 +153,11 @@ class Tweet:
     def markdown_directory(self) -> Path:
         """The directory for the Markdown file associated with this tweet."""
         return Path(self.tweeted.strftime("%Y/%m/%d/"))
+
+    @property
+    def markdown_attachment_directory(self) -> Path:
+        """The directory where attachments for this tweet will live in Markdown."""
+        return self.markdown_directory / "attachments"
 
     @property
     def markdown_file(self) -> Path:
@@ -179,9 +195,16 @@ class Tweet:
         return self._HANDLE.sub(r"[[\1|@\1]]", self.full_text)
 
     @property
+    def _markdown_media(self) -> str:
+        """The Markdown for all the media attached to this Tweet."""
+        if self.media:
+            return "\n---\n" + "\n".join(f"![[{media}]]" for media in self.media)
+        return ""
+
+    @property
     def markdown(self) -> str:
         """The Markdown representation of the Tweet."""
-        return f"---\n{self._front_matter}\n---\n\n{self._markedup_full_text}\n"
+        return f"---\n{self._front_matter}\n---\n\n{self._markedup_full_text}\n{self._markdown_media}"
 
 
 ### tweet.py ends here
