@@ -79,6 +79,21 @@ def main() -> None:
         for mention in tweet.mentions:
             if not (arguments.vault / mention.markdown_file).exists():
                 (arguments.vault / mention.markdown_file).write_text(mention.markdown)
+        if tweet.media:
+            (
+                attachments := (arguments.vault / tweet.markdown_attachment_directory)
+            ).mkdir(parents=True, exist_ok=True)
+            for media in tweet.media:
+                try:
+                    (attachments / media).write_bytes(
+                        (arguments.tweets.parent / "tweets_media" / media).read_bytes()
+                    )
+                except FileNotFoundError:
+                    # TODO: Figure out another way of handling this. It
+                    # looks like every instance of this is where a Tweet
+                    # contains an actual genuine video, and the export
+                    # didn't include a copy of it.
+                    print(f"Skipping {media} as it isn't found locally")
 
 
 ##############################################################################
