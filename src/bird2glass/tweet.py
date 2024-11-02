@@ -66,14 +66,24 @@ class User:
         )
 
     @property
+    def markdown_directory(self) -> Path:
+        """The directory for the user."""
+        return Path("accounts/")
+
+    @property
     def markdown_file(self) -> Path:
         """The name of the Markdown file for this user."""
-        return Path(f"accounts/{self.handle}.md")
+        return (self.markdown_directory / self.handle).with_suffix(".md")
 
     @property
     def url(self) -> str:
         """The URL for the user."""
         return f"https://x.com/{self.handle}"
+
+    @property
+    def markdown(self) -> str:
+        """Markdown text for this user."""
+        return f'---\naliases:\n  - "@{self.handle}"\n  - "{self.name}"\nname: {self.name}\nurl: {self.url}\n---'
 
 
 ##############################################################################
