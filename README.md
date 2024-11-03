@@ -10,7 +10,7 @@ archive into an Obsidian Vault.
 > 2022, in the days before Twitter had the new owner. I've since stopped
 > using Twitter and have no idea if the form of the archive is the same.
 
-![Graph view of my Tweets](./imgs/bird2glass.png)
+![Graph view of my Tweets](https://raw.githubusercontent.com/davep/bird2glass/refs/heads/main/imgs/bird2glass.png)
 
 ## Installing
 
