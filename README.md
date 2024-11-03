@@ -1,7 +1,5 @@
 # bird2glass
 
-![Graph view of my Tweets](./imgs/bird2glass.png)
-
 ## Introduction
 
 This is a simple command line tool that can be used to turn a Twitter
@@ -11,6 +9,8 @@ archive into an Obsidian Vault.
 > This code was written while working with a Twitter archive created in
 > 2022, in the days before Twitter had the new owner. I've since stopped
 > using Twitter and have no idea if the form of the archive is the same.
+
+![Graph view of my Tweets](./imgs/bird2glass.png)
 
 ## Installing
 
