@@ -1,6 +1,6 @@
 [project]
 name = "bird2glass"
-version = "0.0.1"
+version = "1.0.0"
 description = "A tool for converting Twitter exports to an Obsidian Vault."
 authors = [
     { name = "Dave Pearson", email = "davep@davep.org" }
