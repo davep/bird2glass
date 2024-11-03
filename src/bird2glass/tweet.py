@@ -112,6 +112,11 @@ class Tweet:
     """The time the Tweet was sent."""
     media: list[str] = field(default_factory=list)
     """The list of media files associated with this Tweet."""
+    twitpics: list[str] = field(default_factory=list)
+    """List of URLs of images hosted on TwitPic"""
+
+    _TWITPIC = compile(r"https?://twitpic\.com/\w+")
+    """Regular expression for finding images posted on TwitPic."""
 
     def __init__(self, tweet: dict[str, Any], tweeter: User) -> None:
         """Initialise the Tweet object.
@@ -148,6 +153,7 @@ class Tweet:
             )
             if "in_reply_to_status_id" in data:
                 self.in_reply_to_tweet = f"{self.in_reply_to_user.url}/status/{data['in_reply_to_status_id']}"
+        self.twitpics = self._TWITPIC.findall(self.full_text)
 
     @property
     def markdown_directory(self) -> Path:
@@ -182,7 +188,7 @@ class Tweet:
                 if self.in_reply_to_tweet is not None
                 else "",
                 f"url: {self.url}",
-                f"attachment-count: {len(self.media)}",
+                f"attachment-count: {len(self.media) + len(self.twitpics)}",
             )
             if matter
         )
@@ -198,9 +204,11 @@ class Tweet:
     @property
     def _markdown_media(self) -> str:
         """The Markdown for all the media attached to this Tweet."""
-        if self.media:
-            return "\n---\n" + "\n".join(f"![[{media}]]" for media in self.media)
-        return ""
+        media = [f"![[{media}]]" for media in self.media] + [
+            f'<iframe src="{twicpic}" style="overflow: auto; resize: both; aspect-ratio: 1/1; width: 100%; height: 100%;"></iframe>'
+            for twicpic in self.twitpics
+        ]
+        return f"\n---\n{'\n'.join(media)}" if media else ""
 
     @property
     def markdown(self) -> str:
