@@ -182,6 +182,7 @@ class Tweet:
                 if self.in_reply_to_tweet is not None
                 else "",
                 f"url: {self.url}",
+                f"attachment-count: {len(self.media)}",
             )
             if matter
         )
