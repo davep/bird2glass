@@ -66,6 +66,14 @@ Some things to note:
 - Back in the day, before you could attach media to tweets, I used TwitPic a
   lot. This tool attempts to detect TwicPic images and tries to embed them
   using an `iframe`.
+- Where attached media is available and easy to work out, it is stored in
+  the vault as an attachment.
+- Currently actual proper videos aren't stored in the archive from Twitter
+  and so aren't easy to grab and handle; this means some video media will be
+  missing. I hope to work on this some more in the future (I seldom attached
+  videos so it's not a huge issue for me).
+- This only pulls in Tweets, not DMs, Periscopes, Circles, Moments, etc. I
+  might expand it in the future.
 
 ## Getting help
 
