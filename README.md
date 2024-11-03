@@ -1,5 +1,7 @@
 # bird2glass
 
+![Graph view of my Tweets](./imgs/bird2glass.png)
+
 ## Introduction
 
 This is a simple command line tool that can be used to turn a Twitter
@@ -45,6 +47,25 @@ bird2glass tweets-file obsidian-vault
 where `tweets-file` is the file that contains all of your tweets (this
 should be `tweets.js` within the extracted directory) and `obsidian-vault`
 is the directory you created that will be the Obsidian Vault.
+
+## Notes and assumptions
+
+This tool was built in part as an experiment in what can be done with
+Obsidian, in part for fun, and fully for my own needs. As such there might
+be assumptions and design decisions in here that won't match what you need.
+Updates to make the code more general are welcome; likewise hacking it to
+make it work "just so" for you is encouraged.
+
+Some things to note:
+
+- Everything relating to hashtags is left to Obsidian's understanding of
+  hashtags. I don't know if Twitter and Obsidian's "specification" for a
+  hashtag are the same, but I'm working on the assumption they are.
+- Every single tweet is turned into its own Markdown file. If you tweeted a
+  lot, expect a *lot* of files to be created.
+- Back in the day, before you could attach media to tweets, I used TwitPic a
+  lot. This tool attempts to detect TwicPic images and tries to embed them
+  using an `iframe`.
 
 ## Getting help
 
