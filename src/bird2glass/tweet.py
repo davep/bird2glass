@@ -84,7 +84,7 @@ class User:
     @property
     def markdown(self) -> str:
         """Markdown text for this user."""
-        return f'---\naliases:\n  - "@{self.handle}"\n  - "{self.name}"\nname: {self.name}\nurl: {self.url}\n---'
+        return f'---\naliases:\n  - "@{self.handle}"\n  - "{self.name}"\nname: "{self.name}"\nurl: {self.url}\n---'
 
 
 ##############################################################################
