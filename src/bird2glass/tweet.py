@@ -51,12 +51,25 @@ class User:
     """The user's name."""
 
     def __init__(self, user: dict[str, Any]) -> None:
+        """Initialise the User.
+
+        Args:
+            args: The user data.
+        """
         self.identity = user["id_str"]
         self.handle = user["screen_name"]
         self.name = user["name"]
 
     @classmethod
     def from_account(cls, tweets: Path) -> User:
+        """Create a `User` instance from the account of the archive.
+
+        Args:
+            tweets: The path to the file that contains the tweets.
+
+        Returns:
+            An instance of `User` for the author of the tweets.
+        """
         account_data = load_javascript(tweets.parent / "account.js")[0]
         return cls(
             {
@@ -177,6 +190,7 @@ class Tweet:
 
     @property
     def _front_matter(self) -> str:
+        """The front matter for the Markdown version of the tweet."""
         return "\n".join(
             matter
             for matter in (
