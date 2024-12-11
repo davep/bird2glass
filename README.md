@@ -64,7 +64,7 @@ Some things to note:
 - Every single tweet is turned into its own Markdown file. If you tweeted a
   lot, expect a *lot* of files to be created.
 - Back in the day, before you could attach media to tweets, I used TwitPic a
-  lot. This tool attempts to detect TwicPic images and tries to embed them
+  lot. This tool attempts to detect TwitPic images and tries to embed them
   using an `iframe`.
 - Where attached media is available and easy to work out, it is stored in
   the vault as an attachment.
